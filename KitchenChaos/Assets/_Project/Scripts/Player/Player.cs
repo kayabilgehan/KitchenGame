@@ -33,6 +33,13 @@ namespace KitchenChaos.Player {
 		}
 		private void Start() {
 			gameInput.OnInteractAction += GameInput_OnInteractAction;
+			gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+		}
+
+		private void GameInput_OnInteractAlternateAction(object sender, EventArgs e) {
+			if (selectedCounter != null) {
+				selectedCounter.InteractAlternate(this);
+			}
 		}
 
 		private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
@@ -85,17 +92,15 @@ namespace KitchenChaos.Player {
 
 			if (!canMove) {
 				// Attemt only x movement
-				if (moveDir.x != 0) {
-					moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-					canMove = !Physics.CapsuleCast(transform.position, transform.position + (Vector3.up * playerSettings.PlayerHeight), playerSettings.PlayerRadius, moveDirX, moveDistance);
-					if (canMove) {
-						moveDir = moveDirX;
-					}
+				moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
+				canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + (Vector3.up * playerSettings.PlayerHeight), playerSettings.PlayerRadius, moveDirX, moveDistance);
+				if (canMove) {
+					moveDir = moveDirX;
 				}
-				
-				if (!canMove && moveDir.z != 0) {
+				else {
+					// Attemt only z movement
 					moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-					canMove = !Physics.CapsuleCast(transform.position, transform.position + (Vector3.up * playerSettings.PlayerHeight), playerSettings.PlayerRadius, moveDirZ, moveDistance);
+					canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + (Vector3.up * playerSettings.PlayerHeight), playerSettings.PlayerRadius, moveDirZ, moveDistance);
 					if (canMove) {
 						moveDir = moveDirZ;
 					}

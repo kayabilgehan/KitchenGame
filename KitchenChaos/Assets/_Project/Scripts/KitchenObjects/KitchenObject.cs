@@ -1,3 +1,4 @@
+using KitchenChaos.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,5 +23,17 @@ public class KitchenObject : MonoBehaviour
     }
 	public IKitchenObjectParent GetKitchenObjectParent() {
         return kitchenObjectParent;
+	}
+	public void DestroySelf() {
+		kitchenObjectParent.ClearKitchenObject();
+        Destroy(gameObject);
+	}
+
+    public static KitchenObject SpawnKitchenObject(KitchenObjectSo kitchenObjectSo, IKitchenObjectParent kitchenObjectParent) {
+		Transform kitchenObjectTransform = Instantiate(kitchenObjectSo.Prefab);
+		KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+        kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
+
+        return kitchenObject;
 	}
 }
