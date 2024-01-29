@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlatesCounter : BaseCounter {
-
+	public event EventHandler OnPlateSpawned;
+	public event EventHandler OnPlateRemoved;
 	[SerializeField] private KitchenObjectSo plateKitchenObjectSo;
 
 	private float spawnPlateTimer;
@@ -14,15 +15,24 @@ public class PlatesCounter : BaseCounter {
 	private int platesSpawnedAmountMax = 4;
 
 	public override void Interact(Player player) {
+		if (!player.HasKitchenObject()) {
+			if (platesSpawnedAmount > 0) {
+				platesSpawnedAmount--;
 
+				KitchenObject.SpawnKitchenObject(plateKitchenObjectSo, player);
+				OnPlateRemoved?.Invoke(this, EventArgs.Empty);
+			}
+		}
 	}
 	private void Update() {
 		spawnPlateTimer += Time.deltaTime;
 		if (spawnPlateTimer > spawnPlateTimerMax) {
 			spawnPlateTimer = 0f;
 
-			if (spawnPlateTimer < platesSpawnedAmountMax) {
+			if (platesSpawnedAmount < platesSpawnedAmountMax) {
 				platesSpawnedAmount++;
+
+				OnPlateSpawned?.Invoke(this, EventArgs.Empty);
 			}
 		}
 	}

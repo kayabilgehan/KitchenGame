@@ -237,6 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8514d0b2d68d27c4195bf93bf78f70d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  platesCounter: {fileID: 4490967822217696752}
   CounterTopPoint: {fileID: 131836167032935645}
   plateVisualPrefab: {fileID: 3812876574508226176, guid: c0c9afd619b40914a8f625c0535e2284,
     type: 3}
